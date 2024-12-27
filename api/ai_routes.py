@@ -1,10 +1,7 @@
 from flask import Blueprint, jsonify, request
 from dotenv import load_dotenv
 import os
-import playsound
-from gtts import gTTS
 import openai
-import speech_recognition as sr
 from api.services import test_input
 
 api_blueprint = Blueprint('api', __name__)
@@ -51,16 +48,6 @@ def process_ai():
             conversation_histories[user_id].append({"role": "assistant", "content": response_text})
             response_text = completion.choices[0].message.content
             
-            # Generate audio response
-            speech = gTTS(text=response_text, lang=lang, slow=False, tld="com.au")
-            speech_file = "response.mp3"
-            speech.save(speech_file)
-            
-            
-            playsound.playsound(speech_file)
-            
-            if os.path.exists(speech_file):
-                os.remove(speech_file)
             return jsonify({"response": response_text}), 200
         
         return jsonify({"response": f"Command not recognized or '{ai_name}' not mentioned."}), 400
@@ -80,32 +67,3 @@ def test():
 
     # Return the response as JSON
     return jsonify({'response': response})
-
-
-
-
-# while True:
-#     def get_audio():
-#         r = sr.Recognizer()
-#         with sr.Microphone() as source:
-#             audio = r.listen(source)
-#             said = ""
-            
-#             try:
-#                 said = r.recognize_google(audio)
-#                 print("Input : ")
-#                 print(said)
-
-#                 if "Friday" in said:
-#                     completion = openai.chat.completions.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": said}])
-#                     text = completion.choices[0].message.content
-#                     speech = gTTS(text=text, lang=lang, slow=False, tld="com.au")
-#                     speech.save("welcome1.mp3")
-#                     playsound.playsound("welcome1.mp3")
-                    
-#             except Exception as e:
-#                 print(f"Exception: {str(e)}")
-                
-#         return said
-    
-#     get_audio()
