@@ -1,14 +1,11 @@
 from flask import Blueprint, jsonify, request
 from dotenv import load_dotenv
 import os
-import time
-import pyaudio
 import playsound
 from gtts import gTTS
 import openai
 import speech_recognition as sr
 from api.services import test_input
-import uuid
 
 api_blueprint = Blueprint('api', __name__)
 
